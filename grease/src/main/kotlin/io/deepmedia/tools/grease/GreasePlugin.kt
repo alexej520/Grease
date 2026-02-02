@@ -1,10 +1,10 @@
 package io.deepmedia.tools.grease
 
 import com.android.build.api.component.analytics.AnalyticsEnabledVariant
+import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.Variant
 import com.android.build.api.variant.impl.getApiString
-import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.internal.LibraryTaskManager
 import com.android.build.gradle.internal.LoggerWrapper
 import com.android.build.gradle.internal.TaskManager
@@ -406,7 +406,7 @@ open class GreasePlugin : Plugin<Project> {
         val jarExtractWorkdir = workdir.dir("extract").dir("jar")
         val jarFileName = "classes.jar"
 
-        val bundleLibraryTask = creationConfig.taskContainer.bundleLibraryTask
+        val bundleLibraryTask = creationConfig.taskContainer.bundleLibraryTask!!
 
         val greaseExpandTask = target.tasks.locateOrRegisterTask(
             creationConfig.resolveTaskName("extract", "Aar").greasify(),
@@ -506,7 +506,7 @@ open class GreasePlugin : Plugin<Project> {
                         }
                 }
 
-                greaseExtension.relocators.get().forEach<Relocator?>(::relocate)
+                greaseExtension.relocators.get().forEach(::relocate)
                 greaseExtension.transformers.get().forEach(::transform)
                 transform(KotlinModuleShadowTransformer(logger.child("kotlin_module")))
             }
@@ -522,7 +522,7 @@ open class GreasePlugin : Plugin<Project> {
                 replacePackagesInFile(
                     aarExtractWorkdir.file("AndroidManifest.xml").asFile,
                     greaseShadowDir.file("AndroidManifest.xml").asFile,
-                    relocators,
+                    relocators.get().toList(),
                     target,
                 )
 

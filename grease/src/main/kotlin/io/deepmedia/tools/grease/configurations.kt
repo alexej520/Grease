@@ -1,9 +1,9 @@
 package io.deepmedia.tools.grease
 
 import com.android.build.api.attributes.BuildTypeAttr
+import com.android.build.api.dsl.LibraryBuildType
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.Variant
-import com.android.build.gradle.internal.dsl.BuildType
 import com.android.build.gradle.internal.publishing.AndroidArtifacts
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
@@ -132,7 +132,7 @@ internal fun Project.createProductFlavorConfigurations(
 // Create one configuration per build type.
 // Make it extend the root configuration so that artifacts are inherited.
 internal fun Project.createBuildTypeConfigurations(
-    buildTypes: NamedDomainObjectContainer<out BuildType>,
+    buildTypes: NamedDomainObjectContainer<out LibraryBuildType>,
     isTransitive: Boolean,
     log: Logger
 ) {

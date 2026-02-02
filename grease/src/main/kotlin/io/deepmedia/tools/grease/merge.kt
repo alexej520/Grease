@@ -7,6 +7,7 @@ import com.android.ide.common.resources.MergedResourceWriter
 import com.android.ide.common.resources.MergedResourceWriterRequest
 import com.android.ide.common.resources.ResourceCompilationService
 import com.android.ide.common.resources.ResourceMerger
+import com.android.ide.common.resources.ResourcePathEncoding
 import com.android.ide.common.resources.ResourceSet
 import com.android.ide.common.workers.WorkerExecutorFacade
 import org.gradle.api.logging.Logger
@@ -20,7 +21,8 @@ internal fun mergeResourcesWithCompilationService(
     minSdk: Int,
     aaptWorkerFacade: WorkerExecutorFacade,
     blameLogOutputFolder: File,
-    logger: Logger) {
+    logger: Logger
+) {
     val mergedResourcesDir = mergedResources.also {
         it.mkdirs()
     }
@@ -47,7 +49,7 @@ internal fun mergeResourcesWithCompilationService(
                 notCompiledOutputDirectory = null,
                 pseudoLocalesEnabled = false,
                 crunchPng = false,
-                moduleSourceSets = emptyMap()
+                relativePathEncoding = ResourcePathEncoding.AbsoluteNotRelocatable
             )
             val writer = MergedResourceWriter(mergeResourcesWriterRequest)
             resourceMerger.mergeData(writer, true)

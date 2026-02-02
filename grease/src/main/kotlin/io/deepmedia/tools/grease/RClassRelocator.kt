@@ -19,7 +19,7 @@ internal class RClassRelocator(
         include( "%regex[$fromRPathRegex]")
     }
 
-    override fun canRelocateClass(className: String?): Boolean = false
+    override fun canRelocateClass(className: String): Boolean = false
 
     override fun relocatePath(context: RelocatePathContext): String {
         val foundedPath = fromRPathRegex.find(context.path)?.value

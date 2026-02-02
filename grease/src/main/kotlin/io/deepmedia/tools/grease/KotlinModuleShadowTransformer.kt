@@ -1,11 +1,11 @@
 package io.deepmedia.tools.grease
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.CacheableTransformer
-import com.github.jengelman.gradle.plugins.shadow.transformers.Transformer
+import com.github.jengelman.gradle.plugins.shadow.transformers.ResourceTransformer
 import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
 import org.gradle.api.file.FileTreeElement
-import kotlinx.metadata.jvm.KotlinModuleMetadata
-import kotlinx.metadata.jvm.UnstableMetadataApi
+import kotlin.metadata.jvm.KotlinModuleMetadata
+import kotlin.metadata.jvm.UnstableMetadataApi
 import org.apache.tools.zip.ZipEntry
 import org.apache.tools.zip.ZipOutputStream
 
@@ -13,7 +13,7 @@ import org.apache.tools.zip.ZipOutputStream
 
 @CacheableTransformer
 @OptIn(UnstableMetadataApi::class)
-internal class KotlinModuleShadowTransformer(private val logger: Logger) : Transformer {
+internal class KotlinModuleShadowTransformer(private val logger: Logger) : ResourceTransformer {
     @Suppress("ArrayInDataClass")
     private data class Entry(val path: String, val bytes: ByteArray)
 
@@ -31,7 +31,7 @@ internal class KotlinModuleShadowTransformer(private val logger: Logger) : Trans
                 .fold(content) { acc, relocator -> relocator.applyToSourceContent(acc) }
 
         logger.i { "Transforming kotlin_module ${context.path}" }
-        val metadata = KotlinModuleMetadata.read(context.`is`.readBytes())
+        val metadata = KotlinModuleMetadata.read(context.inputStream.readBytes())
         val module = metadata.kmModule
 
         val packageParts = module.packageParts.toMap()
